@@ -1,0 +1,12 @@
+# Taste
+- Expects full end-to-end execution, not plans or mockups: inspect the existing repo/package.json/source first, plan, implement, run the dev server, inspect the rendered result, test mobile + desktop, fix console errors, then run a production build. Confidence: 0.85
+- Wants a closing summary that lists files changed, calls out every placeholder that must be personalized, and gives the exact commands to run and build. Confidence: 0.8
+- Asks the agent to critically review its own output at the end and improve anything generic, unfinished, cluttered, or inconsistent. Confidence: 0.75
+- Strongly against fabricated content: no invented achievements, users, metrics, deployment URLs, employment history, internships, or awards. Prefer clearly-marked placeholders and example data. Confidence: 0.9
+- Prefers no fake functionality (e.g., a contact form that pretends to send without a backend) — a `mailto:` link is preferred. Confidence: 0.75
+- Prefers JavaScript ES6+ over TypeScript. Confidence: 0.8
+- Uses npm; keep dependencies minimal and avoid unnecessary libraries. Confidence: 0.8
+- Separates content/data from presentation so editable copy and URLs live in a single config file; keeps components small, reusable, and sensibly named rather than one giant component. Confidence: 0.75
+- Prefers the agent to decide and proceed autonomously with recommended defaults on design and technical decisions instead of blocking on clarifying multiple-choice questions. Confidence: 0.6
+- Treats the single content/data file as the source of truth: after the user edits it, expects the agent to audit everything downstream for newly broken states (empty URLs, missing/unknown variants, stray placeholder text, stale copy) and fix them without being asked. Confidence: 0.65
+- For personalization passes, explicitly asks the agent to request the real details it cannot infer (name, initials, email, GitHub/LinkedIn, projects, education, résumé file) rather than guessing them or silently keeping placeholders. Confidence: 0.7
