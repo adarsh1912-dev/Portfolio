@@ -23,3 +23,14 @@
 
 ## Data presentation
 - Prefers qualitative, honest representations of skill (grouped categories) over meaningless progress bars or arbitrary percentage ratings. Confidence: 0.7
+
+## Enhancing existing projects
+- When upgrading an existing site, treats it as an enhancement, not a rewrite: preserve existing content, real project data, links, routing, working components, styling system, and architecture, and reuse installed dependencies rather than swapping the stack for convenience. Confidence: 0.85
+- Keeps the project's existing conventions (JavaScript vs TypeScript, Tailwind version, existing animation library) instead of introducing a parallel system. Confidence: 0.8
+
+## Effects performance and restraint
+- Wants heavy visuals (3D/WebGL) to stay practical: lazy-loaded as a separate chunk, no large external assets, procedural geometry over downloads, proper cleanup of listeners/loops/GPU resources, no React re-render on every pointer move, and no post-processing/shadows that aren't earning their cost. Confidence: 0.8
+- Expects a graceful static/CSS fallback when the effect can't run (WebGL unavailable, scene error) rather than a blank or broken panel. Confidence: 0.8
+- Prefers a small number of exceptionally executed details over many mediocre effects; every animation must have a clear purpose. Confidence: 0.8
+- Never lets an effect hurt usability: no custom cursor that replaces normal pointer behavior or makes links harder to click, no canvas that blocks scrolling or important content/controls. Confidence: 0.75
+- Degrades intensity by device rather than shipping one heavy configuration everywhere — lower DPR/fewer particles/effects off on mobile and touch, hover-dependent interactions disabled where hover doesn't exist. Confidence: 0.75

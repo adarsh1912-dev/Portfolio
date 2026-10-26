@@ -1,6 +1,6 @@
 # Adarsh Raj — Developer Portfolio
 
-A single-page editorial portfolio for Adarsh Raj, an Information Technology student at Narula Institute of Technology, built with React, Vite, Tailwind CSS, Motion, and Lucide.
+A single-page editorial portfolio for Adarsh Raj, an Information Technology student at Narula Institute of Technology, built with React, Vite, Tailwind CSS, Motion, Lucide, and a React Three Fiber hero scene.
 
 ## Commands
 
@@ -10,6 +10,17 @@ npm run dev      # http://localhost:5173
 npm run build    # production build in dist/
 npm run preview  # preview the production build
 ```
+
+## 3D hero
+
+The hero's “Fig. 01 — Core” panel is a procedural Three.js scene (`src/components/hero/`): a faceted chrome core, three orbital rings, lime marker nodes, and sparse particles, lit by a locally generated studio environment. Pointer position drives a damped parallax rotation while the rings rotate slowly on their own.
+
+- The scene is lazy-loaded as a separate chunk; the static technical diagram renders immediately and is also the fallback when WebGL is unavailable or `prefers-reduced-motion: reduce` is set.
+- Rendering pauses (via `frameloop="demand"`) when the hero leaves the viewport.
+- Mobile uses a lower DPR, fewer particles, and disables antialiasing; no external models, textures, or HDR files are loaded.
+- The canvas is decorative (`aria-hidden`) and does not block page scrolling on touch devices.
+
+Project previews also use a pointer-driven 3D tilt on fine-pointer devices (`TiltFrame.jsx`); tilt is disabled for touch and reduced-motion users. A thin lime scroll-progress line sits under the header.
 
 ## Personalize
 

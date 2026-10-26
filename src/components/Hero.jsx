@@ -2,7 +2,7 @@ import { motion, useReducedMotion } from "motion/react";
 import { ArrowDown, ArrowUpRight, Download } from "lucide-react";
 import { profile } from "../data/content.js";
 import Button from "./Button.jsx";
-import HeroDiagram from "./HeroDiagram.jsx";
+import HeroVisual from "./hero/HeroVisual.jsx";
 
 const EASE = [0.22, 1, 0.36, 1];
 
@@ -125,7 +125,7 @@ export default function Hero() {
 
           <div className="lg:col-span-5 lg:pl-2">
             <motion.div variants={reduceMotion ? undefined : item}>
-              <HeroDiagram />
+              <HeroVisual />
             </motion.div>
           </div>
         </motion.div>

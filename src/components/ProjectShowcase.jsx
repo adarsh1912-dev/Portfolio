@@ -1,5 +1,6 @@
 import ArrowLink from "./ArrowLink.jsx";
 import ProjectPreview from "./ProjectPreview.jsx";
+import TiltFrame from "./TiltFrame.jsx";
 
 function ProjectMeta({ project }) {
   return (
@@ -82,9 +83,9 @@ function FeatureProject({ project }) {
         ) : null}
       </div>
 
-      <div className="relative mt-4 transition-transform duration-500 ease-out group-hover:-translate-y-1">
+      <TiltFrame className="relative mt-4 transition-transform duration-500 ease-out group-hover:-translate-y-1">
         <ProjectPreview project={project} />
-      </div>
+      </TiltFrame>
 
       <div className="mt-8 grid gap-8 border-t border-line pt-8 md:grid-cols-12 md:gap-10">
         <div className="md:col-span-7">
@@ -116,9 +117,9 @@ function SplitProject({ project, previewSide, copyOffset }) {
           reversed ? "lg:col-start-7" : "lg:col-start-1"
         }`}
       >
-        <div className="transition-transform duration-500 ease-out group-hover:-translate-y-1">
+        <TiltFrame className="transition-transform duration-500 ease-out group-hover:-translate-y-1">
           <ProjectPreview project={project} />
-        </div>
+        </TiltFrame>
       </div>
 
       <div

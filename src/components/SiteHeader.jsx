@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
+import { motion, useScroll } from "motion/react";
 import { ArrowUpRight, Menu } from "lucide-react";
 import { nav, profile } from "../data/content.js";
 import MobileMenu from "./MobileMenu.jsx";
@@ -7,6 +8,7 @@ export default function SiteHeader() {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const triggerRef = useRef(null);
+  const { scrollYProgress } = useScroll();
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 16);
@@ -34,7 +36,7 @@ export default function SiteHeader() {
   return (
     <>
       <header
-        className={`sticky top-0 z-40 transition-colors duration-300 ${
+        className={`relative sticky top-0 z-40 transition-colors duration-300 ${
           scrolled
             ? "border-b border-line bg-paper"
             : "border-b border-transparent bg-transparent"
@@ -98,6 +100,11 @@ export default function SiteHeader() {
             </button>
           </div>
         </div>
+        <motion.span
+          aria-hidden="true"
+          style={{ scaleX: scrollYProgress }}
+          className="pointer-events-none absolute inset-x-0 bottom-0 h-px origin-left bg-accent/80"
+        />
       </header>
 
       <MobileMenu open={menuOpen} onClose={closeMenu} />

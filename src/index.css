@@ -140,4 +140,91 @@
     background-position: top left, top left;
     background-repeat: no-repeat;
   }
+
+  .hero-stage {
+    background: radial-gradient(
+      ellipse at 50% 42%,
+      var(--color-surface-2) 0%,
+      var(--color-surface) 44%,
+      var(--color-paper) 78%
+    );
+    isolation: isolate;
+  }
+
+  .hero-stage::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(
+      circle,
+      var(--color-line-strong) 0.5px,
+      transparent 0.6px
+    );
+    background-size: 24px 24px;
+    opacity: 0.3;
+    -webkit-mask-image: radial-gradient(
+      ellipse at center,
+      #000 8%,
+      transparent 72%
+    );
+    mask-image: radial-gradient(ellipse at center, #000 8%, transparent 72%);
+    pointer-events: none;
+  }
+
+  .hero-stage canvas {
+    position: absolute;
+    inset: 0;
+  }
+
+  .hero-scene-in {
+    animation: hero-scene-in 900ms var(--ease-out-soft) both;
+  }
+
+  .tilt-frame {
+    perspective: 1400px;
+    transform-style: preserve-3d;
+  }
+
+  .tilt-inner {
+    transform: rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg));
+    transform-style: preserve-3d;
+    transition: transform 600ms var(--ease-out-soft);
+  }
+
+  .tilt-frame:hover .tilt-inner {
+    transition-duration: 120ms;
+    will-change: transform;
+  }
+}
+
+@keyframes hero-scene-in {
+  from {
+    opacity: 0;
+    transform: scale(1.015);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@media (hover: none), (pointer: coarse) {
+  .tilt-frame {
+    perspective: none;
+  }
+
+  .tilt-inner {
+    transform: none !important;
+    transition: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-scene-in {
+    animation: none;
+  }
+
+  .tilt-inner {
+    transform: none !important;
+  }
 }
