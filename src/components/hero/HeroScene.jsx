@@ -2,32 +2,53 @@ import { useEffect, useMemo, useRef } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { MathUtils, PMREMGenerator } from "three";
 import { RoomEnvironment } from "three/addons/environments/RoomEnvironment.js";
+import { RoundedBoxGeometry } from "three/addons/geometries/RoundedBoxGeometry.js";
 
-const ACCENT = "#C9F24D";
-const METAL = "#B9B5AA";
-const WARM = "#EDEAE1";
+const ACCENT = "#D3F04A";
 
-function createParticlePositions(count) {
-  const positions = new Float32Array(count * 3);
-  let seed = 27;
-
-  const random = () => {
-    seed = (seed * 16807) % 2147483647;
-    return (seed - 1) / 2147483646;
-  };
-
-  for (let index = 0; index < count; index += 1) {
-    const radius = 2.1 + random() * 1.1;
-    const theta = random() * Math.PI * 2;
-    const phi = Math.acos(2 * random() - 1);
-
-    positions[index * 3] = radius * Math.sin(phi) * Math.cos(theta);
-    positions[index * 3 + 1] = radius * Math.cos(phi) * 0.72;
-    positions[index * 3 + 2] = radius * Math.sin(phi) * Math.sin(theta);
-  }
-
-  return positions;
-}
+const LAYERS = [
+  {
+    key: "data",
+    finalY: -0.58,
+    startY: -1.28,
+    position: [0, -1.28, 0],
+    rotation: [0, -0.12, 0.012],
+    material: {
+      color: "#4B463A",
+      metalness: 0.35,
+      roughness: 0.54,
+      envMapIntensity: 0.9,
+    },
+  },
+  {
+    key: "logic",
+    finalY: 0.02,
+    startY: 0.02,
+    position: [0.04, 0.02, 0.02],
+    rotation: [0, 0.1, -0.008],
+    material: {
+      color: "#9C9587",
+      metalness: 0.85,
+      roughness: 0.3,
+      envMapIntensity: 1.2,
+    },
+  },
+  {
+    key: "interface",
+    finalY: 0.62,
+    startY: 1.32,
+    position: [-0.03, 1.32, 0],
+    rotation: [0, -0.06, 0.01],
+    material: {
+      color: "#E8DFCF",
+      metalness: 0.05,
+      roughness: 0.45,
+      clearcoat: 0.3,
+      clearcoatRoughness: 0.5,
+      envMapIntensity: 0.95,
+    },
+  },
+];
 
 function StudioEnvironment() {
   const gl = useThree((state) => state.gl);
@@ -39,7 +60,7 @@ function StudioEnvironment() {
     const target = pmrem.fromScene(room, 0.04);
 
     scene.environment = target.texture;
-    scene.environmentIntensity = 1.25;
+    scene.environmentIntensity = 1.2;
     pmrem.dispose();
     room.dispose?.();
 
@@ -52,191 +73,174 @@ function StudioEnvironment() {
   return null;
 }
 
-function Particles({ count }) {
-  const points = useRef(null);
-  const positions = useMemo(() => createParticlePositions(count), [count]);
+function Stack() {
+  const group = useRef(null);
+  const layers = useRef([]);
+  const intro = useRef(0);
+  const pointer = useThree((state) => state.pointer);
 
-  useFrame((state) => {
-    if (!points.current) return;
-    points.current.rotation.y = -state.clock.elapsedTime * 0.018;
+  const geometries = useMemo(
+    () => ({
+      data: new RoundedBoxGeometry(2.9, 0.24, 1.9, 6, 0.09),
+      logic: new RoundedBoxGeometry(2.5, 0.22, 1.65, 6, 0.08),
+      interface: new RoundedBoxGeometry(2.1, 0.2, 1.4, 6, 0.07),
+    }),
+    [],
+  );
+
+  useEffect(
+    () => () => Object.values(geometries).forEach((geometry) => geometry.dispose()),
+    [geometries],
+  );
+
+  useFrame((state, delta) => {
+    if (!group.current) return;
+
+    const dt = Math.min(delta, 0.05);
+    const t = state.clock.elapsedTime;
+
+    intro.current = Math.min(1, intro.current + dt / 1.25);
+    const eased = 1 - (1 - intro.current) ** 3;
+
+    group.current.scale.setScalar(0.94 + eased * 0.06);
+    group.current.position.y = Math.sin(t * 0.5) * 0.03;
+    group.current.rotation.y = MathUtils.damp(
+      group.current.rotation.y,
+      Math.sin(t * 0.16) * 0.18 + pointer.x * 0.18 + eased * 0.06,
+      2.4,
+      dt,
+    );
+    group.current.rotation.x = MathUtils.damp(
+      group.current.rotation.x,
+      0.04 - pointer.y * 0.08,
+      2.4,
+      dt,
+    );
+
+    layers.current.forEach((layer, index) => {
+      if (!layer) return;
+      const config = LAYERS[index];
+      const targetY =
+        MathUtils.lerp(config.startY, config.finalY, eased) +
+        Math.sin(t * 0.62 + index * 1.7) * 0.012;
+      layer.position.y = targetY;
+    });
   });
 
   return (
-    <points ref={points}>
-      <bufferGeometry>
-        <bufferAttribute attach="attributes-position" args={[positions, 3]} />
-      </bufferGeometry>
-      <pointsMaterial
-        color={WARM}
-        size={0.016}
-        sizeAttenuation
-        transparent
-        opacity={0.4}
-        depthWrite={false}
-      />
-    </points>
-  );
-}
-
-function Ring({ radius, rotation, nodes }) {
-  return (
-    <group rotation={rotation}>
-      <mesh>
-        <torusGeometry args={[radius, 0.009, 8, 220]} />
-        <meshStandardMaterial
-          color={METAL}
-          metalness={1}
-          roughness={0.22}
-          envMapIntensity={1.35}
-        />
-      </mesh>
-
-      {nodes.map((node) => (
+    <group ref={group}>
+      {LAYERS.map((layer, index) => (
         <mesh
-          key={node.angle}
-          position={[
-            Math.cos(node.angle) * radius,
-            Math.sin(node.angle) * radius,
-            0,
-          ]}
+          key={layer.key}
+          ref={(node) => {
+            layers.current[index] = node;
+          }}
+          geometry={geometries[layer.key]}
+          position={layer.position}
+          rotation={layer.rotation}
         >
-          <sphereGeometry args={[node.size ?? 0.032, 16, 16]} />
-          <meshStandardMaterial
-            color={node.color}
-            emissive={node.color}
-            emissiveIntensity={node.color === ACCENT ? 3.2 : 0.5}
-            roughness={0.35}
-            metalness={0.2}
-            toneMapped={false}
-          />
+          {index === 2 ? (
+            <meshPhysicalMaterial {...layer.material} />
+          ) : (
+            <meshStandardMaterial {...layer.material} />
+          )}
+
+          {index === 2 ? (
+            <>
+              <mesh position={[0.64, 0.11, 0.3]}>
+                <sphereGeometry args={[0.075, 24, 24]} />
+                <meshStandardMaterial
+                  color={ACCENT}
+                  emissive={ACCENT}
+                  emissiveIntensity={0.5}
+                  roughness={0.3}
+                  metalness={0.1}
+                  toneMapped={false}
+                />
+              </mesh>
+              <mesh position={[-0.28, 0.105, 0.38]}>
+                <boxGeometry args={[0.64, 0.012, 0.11]} />
+                <meshStandardMaterial
+                  color="#17150F"
+                  roughness={0.7}
+                  metalness={0.1}
+                />
+              </mesh>
+            </>
+          ) : null}
         </mesh>
       ))}
     </group>
   );
 }
 
-function Core({ compact }) {
-  const root = useRef(null);
-  const orbits = useRef(null);
-  const intro = useRef(0);
-  const pointer = useThree((state) => state.pointer);
+function CameraRig() {
+  const camera = useThree((state) => state.camera);
+  const size = useThree((state) => state.size);
 
-  useFrame((state, delta) => {
-    if (!root.current) return;
+  useEffect(() => {
+    const aspect = size.width / size.height;
 
-    const dt = Math.min(delta, 0.05);
-    const t = state.clock.elapsedTime;
-
-    intro.current = Math.min(1, intro.current + dt / 1.15);
-    const eased = 1 - (1 - intro.current) ** 3;
-
-    root.current.scale.setScalar(0.9 + eased * 0.1);
-    root.current.position.y = Math.sin(t * 0.42) * 0.05;
-    root.current.rotation.y = MathUtils.damp(
-      root.current.rotation.y,
-      0.2 + t * 0.06 + pointer.x * 0.3,
-      2.4,
-      dt,
-    );
-    root.current.rotation.x = MathUtils.damp(
-      root.current.rotation.x,
-      -pointer.y * 0.18 + Math.sin(t * 0.2) * 0.04,
-      2.4,
-      dt,
-    );
-
-    if (orbits.current) {
-      orbits.current.rotation.z += dt * 0.045;
-      orbits.current.rotation.x = Math.sin(t * 0.24) * 0.06;
+    if (aspect < 0.65) {
+      camera.fov = 52;
+    } else if (aspect > 1.25) {
+      camera.fov = 30;
+    } else {
+      camera.fov = 40;
     }
-  });
 
-  return (
-    <group ref={root}>
-      <mesh>
-        <icosahedronGeometry args={[1.34, 2]} />
-        <meshPhysicalMaterial
-          color="#3B3933"
-          metalness={0.92}
-          roughness={0.2}
-          clearcoat={0.5}
-          clearcoatRoughness={0.22}
-          envMapIntensity={1.15}
-          flatShading
-        />
-      </mesh>
+    camera.updateProjectionMatrix();
+    camera.lookAt(0, 0, 0);
+  }, [camera, size]);
 
-      <group ref={orbits}>
-        <Ring
-          radius={1.8}
-          rotation={[Math.PI / 2, 0, 0]}
-          nodes={[{ angle: 0, color: ACCENT }]}
-        />
-        <Ring
-          radius={2}
-          rotation={[0, Math.PI / 2, 0.35]}
-          nodes={[{ angle: Math.PI * 0.42, color: WARM, size: 0.026 }]}
-        />
-        <Ring
-          radius={2.2}
-          rotation={[Math.PI / 3, Math.PI / 4, -0.2]}
-          nodes={[{ angle: Math.PI * 1.12, color: ACCENT, size: 0.03 }]}
-        />
-      </group>
-
-      <Particles count={compact ? 70 : 150} />
-    </group>
-  );
+  return null;
 }
 
-function Scene({ compact }) {
+function Scene() {
   return (
     <>
-      <ambientLight intensity={0.12} />
-      <directionalLight
-        position={[4, 6, 5]}
-        intensity={2.6}
-        color={WARM}
-      />
+      <CameraRig />
+      <ambientLight intensity={0.16} />
+      <directionalLight position={[4, 6, 5]} intensity={2.4} color="#F1EBDD" />
       <pointLight
-        position={[-3.5, -2, 3]}
-        intensity={12}
+        position={[-3.2, 0.8, 3]}
+        intensity={9}
         distance={9}
         color={ACCENT}
       />
       <pointLight
-        position={[3, -1, -3]}
-        intensity={6}
-        distance={10}
-        color="#8B877A"
+        position={[3, -2, -3]}
+        intensity={5}
+        distance={11}
+        color="#A9A18E"
       />
 
       <StudioEnvironment />
-      <Core compact={compact} />
+      <Stack />
     </>
   );
 }
 
 export default function HeroScene({ active = true }) {
-  const compact =
-    typeof window !== "undefined" && window.innerWidth < 768;
+  const compact = typeof window !== "undefined" && window.innerWidth < 768;
 
   return (
     <Canvas
       dpr={compact ? [1, 1.5] : [1, 1.75]}
       gl={{
-        antialias: !compact,
+        antialias: true,
         alpha: true,
         powerPreference: "high-performance",
       }}
-      camera={{ position: [0, 0.1, 7.1], fov: 38, near: 0.1, far: 20 }}
+      camera={{ position: [3.3, 2.6, 5.3], fov: 42, near: 0.1, far: 24 }}
       shadows={false}
       frameloop={active ? "always" : "demand"}
-      onCreated={({ gl }) => {
-        gl.toneMappingExposure = 1.03;
+      onCreated={({ gl, camera }) => {
+        gl.toneMappingExposure = 1.08;
+        camera.lookAt(0, 0, 0);
       }}
     >
-      <Scene compact={compact} />
+      <Scene />
     </Canvas>
   );
 }

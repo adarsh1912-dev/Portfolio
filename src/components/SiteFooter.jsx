@@ -11,31 +11,31 @@ export default function SiteFooter() {
   };
 
   return (
-    <footer className="border-t border-line">
-      <div className="shell flex flex-col gap-6 py-8 sm:flex-row sm:items-center sm:justify-between">
-        <div className="flex items-center gap-3">
-          <span className="grid size-8 place-items-center border border-line font-mono text-[9px] text-ink-muted">
-            {profile.initials}
+    <footer className="night-panel">
+      <div className="shell flex flex-col gap-5 border-t border-line py-8 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex items-baseline gap-2">
+          <span className="font-display text-lg leading-none tracking-[-0.02em]">
+            {profile.name}
           </span>
-          <p className="font-mono text-[10px] uppercase tracking-[0.14em] text-ink-faint">
-            © {year} {profile.name}
-          </p>
+          <span aria-hidden="true" className="size-1.5 bg-accent" />
+          <span className="text-[12px] text-ink-muted">© {year}</span>
         </div>
 
         <div className="flex items-center justify-between gap-6 sm:justify-end">
-          <p className="hidden font-mono text-[10px] uppercase tracking-[0.14em] text-ink-faint md:block">
-            React · Vite · Tailwind
-          </p>
+          <span className="hidden font-mono text-[10px] uppercase tracking-[0.12em] text-ink-faint md:block">
+            React · Vite · Three.js
+          </span>
           <button
             type="button"
             onClick={scrollToTop}
-            className="group inline-flex min-h-11 items-center gap-2 font-mono text-[10px] uppercase tracking-[0.14em] text-ink-muted transition-colors duration-200 hover:text-accent"
+            className="group inline-flex min-h-11 items-center gap-2 text-[13px] text-ink-muted transition-colors duration-200 hover:text-ink"
           >
             Back to top
             <ArrowUp
-              className="size-3.5 transition-transform duration-200 group-hover:-translate-y-0.5"
+              size={14}
               aria-hidden="true"
-              strokeWidth={1.75}
+              className="transition-transform duration-200 group-hover:-translate-y-0.5"
+              strokeWidth={1.5}
             />
           </button>
         </div>

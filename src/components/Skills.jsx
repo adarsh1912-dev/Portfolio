@@ -16,25 +16,18 @@ export default function Skills() {
           <Reveal
             key={group.label}
             delay={groupIndex * 0.03}
-            className="group grid gap-3 border-b border-line py-6 sm:grid-cols-12 sm:items-baseline sm:gap-6"
+            className="group grid gap-3 border-b border-line py-5 transition-colors duration-200 hover:bg-surface/60 sm:grid-cols-12 sm:gap-8"
           >
-            <h3 className="mono-label transition-colors duration-200 group-hover:text-accent sm:col-span-3">
+            <h3 className="mono-label transition-colors duration-200 group-hover:text-ink sm:col-span-2">
               {group.label}
             </h3>
-            <ul className="flex flex-wrap items-baseline gap-x-4 gap-y-2 sm:col-span-9">
-              {group.items.map((item, index) => (
-                <li key={item} className="flex items-baseline gap-4">
-                  <span className="font-display text-2xl leading-tight tracking-[-0.01em] text-ink md:text-[1.7rem]">
-                    {item}
-                  </span>
-                  {index < group.items.length - 1 ? (
-                    <span
-                      aria-hidden="true"
-                      className="font-mono text-xs text-line-strong"
-                    >
-                      /
-                    </span>
-                  ) : null}
+            <ul className="flex flex-wrap gap-x-6 gap-y-2 sm:col-span-10">
+              {group.items.map((item) => (
+                <li
+                  key={item}
+                  className="text-[16px] leading-relaxed text-ink-muted transition-colors duration-200 group-hover:text-ink"
+                >
+                  {item}
                 </li>
               ))}
             </ul>
@@ -42,8 +35,8 @@ export default function Skills() {
         ))}
       </div>
 
-      <p className="mt-6 max-w-xl text-[13px] leading-relaxed text-ink-muted">
-        These are the tools I have used to build and ship small projects. I am
+      <p className="mt-6 max-w-xl text-[12px] leading-relaxed text-ink-muted">
+        These are the tools I have used to build and ship projects. I am
         comfortable reaching for new ones when the problem calls for it.
       </p>
     </section>

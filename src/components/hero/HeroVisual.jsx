@@ -7,7 +7,7 @@ import {
   useState,
 } from "react";
 import { useReducedMotion } from "motion/react";
-import HeroDiagramArt from "./HeroDiagramArt.jsx";
+import HeroStackArt from "./HeroStackArt.jsx";
 
 const HeroScene = lazy(() => import("./HeroScene.jsx"));
 
@@ -66,58 +66,80 @@ export default function HeroVisual() {
   const live = showScene && !sceneFailed;
 
   return (
-    <figure className="relative overflow-hidden border border-line bg-surface/50">
-      <div className="flex items-center justify-between border-b border-line px-4 py-3">
-        <figcaption className="mono-label">Fig. 01 — Core</figcaption>
-        <span className="mono-label flex items-center gap-2">
-          <span aria-hidden="true" className="size-1 bg-accent" />
+    <figure
+      ref={stageRef}
+      className="night-panel relative h-full min-h-[24rem] w-full overflow-hidden"
+    >
+      <div className="stack-stage absolute inset-0" aria-hidden="true" />
+
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute left-1/2 top-1/2 aspect-square w-[74%] -translate-x-1/2 -translate-y-1/2 rounded-full border border-line/50"
+      />
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute left-1/2 top-1/2 aspect-square w-[52%] -translate-x-1/2 -translate-y-1/2 rounded-full border border-line/25"
+      />
+
+      {live ? (
+        <SceneBoundary
+          fallback={<HeroStackArt />}
+          onError={() => setSceneFailed(true)}
+        >
+          <Suspense fallback={<HeroStackArt />}>
+            <div
+              className="hero-scene-in absolute inset-0"
+              aria-hidden="true"
+            >
+              <HeroScene active={active} />
+            </div>
+          </Suspense>
+        </SceneBoundary>
+      ) : (
+        <HeroStackArt />
+      )}
+
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-x-5 top-5 flex items-start justify-between gap-4"
+      >
+        <span className="mono-label text-ink-faint">
+          Specimen 01 / 03 layers
+        </span>
+        <span className="mono-label flex shrink-0 items-center gap-2 text-ink-faint">
+          <span className="size-1 bg-accent" />
           {live ? "Interactive" : "Static"}
         </span>
       </div>
 
       <div
-        ref={stageRef}
-        className="hero-stage relative aspect-[6/5] w-full overflow-hidden"
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-x-5 bottom-5 flex items-end justify-between gap-4"
       >
-        {live ? (
-          <SceneBoundary
-            fallback={<HeroDiagramArt />}
-            onError={() => setSceneFailed(true)}
-          >
-            <Suspense fallback={<HeroDiagramArt />}>
-              <div
-                className="hero-scene-in absolute inset-0"
-                aria-hidden="true"
+        <ol className="flex flex-wrap gap-x-5 gap-y-1">
+          {["Interface", "Logic", "Data"].map((label, index) => (
+            <li
+              key={label}
+              className="mono-label flex items-baseline gap-1.5"
+            >
+              <span
+                className={index === 0 ? "text-accent" : "text-ink-faint"}
               >
-                <HeroScene active={active} />
-              </div>
-            </Suspense>
-          </SceneBoundary>
-        ) : (
-          <HeroDiagramArt />
-        )}
-
-        {live ? (
-          <div
-            aria-hidden="true"
-            className="pointer-events-none absolute inset-x-4 top-4 flex items-center justify-between"
-          >
-            <span className="font-mono text-[7px] uppercase tracking-[0.18em] text-ink-faint">
-              Core / 001
-            </span>
-            <span className="font-mono text-[7px] uppercase tracking-[0.18em] text-ink-faint">
-              Pointer
-            </span>
-          </div>
-        ) : null}
-      </div>
-
-      <div className="flex items-center justify-between border-t border-line px-4 py-3">
-        <span className="mono-label">Interface → data</span>
-        <span className="mono-label">
-          {live ? "Pointer active" : "Static study"}
+                0{index + 1}
+              </span>
+              <span className="text-ink-muted">{label}</span>
+            </li>
+          ))}
+        </ol>
+        <span className="mono-label hidden shrink-0 text-ink-faint sm:block">
+          {live ? "Pointer / rotate" : "Specimen study"}
         </span>
       </div>
+
+      <figcaption className="sr-only">
+        An interactive 3D specimen of three stacked material layers
+        representing interface, logic, and data.
+      </figcaption>
     </figure>
   );
 }

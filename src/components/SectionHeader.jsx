@@ -1,24 +1,34 @@
-export default function SectionHeader({ index, label, meta, title, accent, lede, id }) {
+export default function SectionHeader({
+  index,
+  label,
+  meta,
+  title,
+  accent,
+  lede,
+  id,
+}) {
   return (
-    <header>
-      <div className="flex items-baseline justify-between gap-4 border-t border-line pt-5">
-        <p className="mono-label">
-          {index} — {label}
-        </p>
-        {meta ? (
-          <p className="mono-label hidden sm:block">{meta}</p>
-        ) : null}
-      </div>
-      <div className="mt-10 grid gap-6 md:grid-cols-12 md:items-end md:gap-10">
-        <h2
-          id={id}
-          className="text-balance font-display text-[clamp(2.5rem,5.2vw,4.25rem)] leading-[0.96] tracking-[-0.02em] md:col-span-8"
-        >
-          {title}{" "}
-          <span className="italic">{accent}</span>
-        </h2>
+    <header className="border-t border-line pt-5">
+      <div className="grid gap-6 md:grid-cols-12 md:gap-8">
+        <div className="md:col-span-2">
+          <span className="font-display text-[2.75rem] leading-none text-ink-faint">
+            {index}
+          </span>
+          <p className="mono-label mt-3">{label}</p>
+          {meta ? <p className="mono-label mt-1">{meta}</p> : null}
+        </div>
+
+        <div className="md:col-span-7">
+          <h2
+            id={id}
+            className="font-display text-[clamp(2.6rem,4.6vw,4.35rem)] leading-[0.94] tracking-[-0.025em]"
+          >
+            {title} <span className="text-ink-muted">{accent}</span>
+          </h2>
+        </div>
+
         {lede ? (
-          <p className="max-w-sm text-[0.95rem] leading-relaxed text-ink-muted md:col-span-4 md:justify-self-end">
+          <p className="max-w-xs text-[13px] leading-relaxed text-ink-muted md:col-span-3 md:pt-2">
             {lede}
           </p>
         ) : null}

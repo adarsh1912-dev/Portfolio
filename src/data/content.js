@@ -5,15 +5,16 @@ export const profile = {
   name: "Adarsh Raj",
   initials: "AR",
   role: "Software Engineering Student",
-  eyebrow: "Full-stack developer · Applied AI enthusiast",
+  eyebrow: "Full-stack developer · Applied AI",
   headline: [
     { text: "I build" },
-    { text: "useful", italic: true },
+    { text: "useful", highlight: true },
     { text: "software", accent: "." },
   ],
   intro:
     "I'm a B.Tech Information Technology student at Narula Institute of Technology, graduating in 2027. I build full-stack applications with JavaScript, React, Node.js, and Express, and I'm interested in applying AI to practical problems.",
   availability: "Open to software engineering internships · Graduating 2027",
+  availabilityShort: "Open to internships · Graduating 2027",
   location: "Kolkata, West Bengal, India",
   email: "aj19122001@gmail.com",
   resumeUrl: "/Resume.pdf",
@@ -286,4 +287,4 @@ export const contact = {
 };
 
 export const projectNote =
-  "Explore the source code on GitHub and try Ymusix through its published npm package. Live demos for Applyzen and Talksy have not been provided.";
+  "Previews are conceptual studies, not live screenshots. Repositories are linked below, and Ymusix is published on npm.";

@@ -27,59 +27,58 @@ export default function Contact() {
     <section
       id="contact"
       aria-labelledby="contact-title"
-      className="scroll-mt-24 border-t border-line"
+      className="night-panel scroll-mt-24"
     >
       <div className="shell py-20 md:py-28 lg:py-32">
-        <div className="flex items-baseline justify-between gap-4">
-          <p className="mono-label">05 — Contact</p>
-          <p className="mono-label hidden sm:block">Open to internships</p>
+        <div className="flex items-center justify-between gap-4 border-t border-line pt-5">
+          <p className="mono-label">05 / Contact</p>
+          <p className="mono-label hidden sm:block">{profile.location}</p>
         </div>
 
-        <div className="mt-10 grid gap-10 md:mt-14 md:grid-cols-12 md:gap-10">
-          <div className="md:col-span-8">
+        <div className="mt-14 grid gap-10 lg:grid-cols-12 lg:gap-10">
+          <div className="lg:col-span-8">
             <h2
               id="contact-title"
-              className="text-balance font-display text-[clamp(2.6rem,6.4vw,5.25rem)] leading-[0.95] tracking-[-0.025em]"
+              className="max-w-3xl font-display text-[clamp(3rem,6.6vw,6rem)] leading-[0.9] tracking-[-0.04em]"
             >
-              {contact.lead} <span className="italic">{contact.accent}</span>
+              {contact.lead}{" "}
+              <span className="text-accent">{contact.accent}</span>
             </h2>
 
             <a
               href={`mailto:${profile.email}`}
-              className="group mt-9 inline-flex max-w-full flex-wrap items-center gap-x-3 gap-y-2 border-b border-line pb-3 transition-colors duration-200 hover:border-accent"
+              className="group mt-12 flex max-w-3xl items-end justify-between gap-4 border-b border-line pb-4 transition-colors duration-200 hover:border-accent"
             >
-              <Mail
-                className="size-5 text-accent"
-                aria-hidden="true"
-                strokeWidth={1.75}
-              />
-              <span className="break-all text-lg text-ink transition-colors duration-200 group-hover:text-accent md:text-2xl">
-                {profile.email}
+              <span className="flex min-w-0 items-center gap-3">
+                <Mail
+                  className="size-5 shrink-0 text-accent"
+                  aria-hidden="true"
+                  strokeWidth={1.75}
+                />
+                <span className="break-all text-[clamp(1.1rem,2.4vw,2.05rem)] tracking-[-0.02em] text-ink transition-colors duration-200 group-hover:text-accent">
+                  {profile.email}
+                </span>
               </span>
               <ArrowUpRight
-                className="size-4 text-ink-faint transition-all duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-accent"
                 aria-hidden="true"
-                strokeWidth={1.75}
+                className="size-5 shrink-0 text-ink-faint transition-all duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-accent"
+                strokeWidth={1.5}
               />
             </a>
           </div>
 
-          <div className="md:col-span-4 md:pt-2">
-            <p className="max-w-sm text-[0.95rem] leading-relaxed text-ink-muted">
+          <div className="lg:col-span-4">
+            <p className="max-w-sm text-[14px] leading-[1.7] text-ink-muted">
               {contact.body}
             </p>
-            <p className="mt-6 flex items-center gap-2 font-mono text-[10px] uppercase leading-relaxed tracking-[0.14em] text-ink-faint">
+            <p className="mono-label mt-6 flex items-center gap-2">
               <span aria-hidden="true" className="size-1.5 shrink-0 bg-accent" />
-              {profile.location}
+              {profile.availabilityShort}
             </p>
           </div>
         </div>
 
-        <div
-          className={`mt-16 border-t border-line lg:grid ${
-            availableLinks.length === 2 ? "lg:grid-cols-2" : "lg:grid-cols-3"
-          }`}
-        >
+        <div className="mt-20 border-t border-line">
           {availableLinks.map((link) => {
             const Icon = link.icon;
             return (
@@ -90,24 +89,24 @@ export default function Contact() {
                   ? { target: "_blank", rel: "noreferrer noopener" }
                   : {})}
                 {...(link.download ? { download: true } : {})}
-                className="group flex min-h-[5.5rem] items-center justify-between gap-4 border-b border-line py-5 transition-colors duration-200 hover:bg-surface/50 lg:border-b-0 lg:border-r lg:px-5 lg:first:pl-0 lg:last:border-r-0 lg:last:pr-0"
+                className="group flex items-center justify-between gap-4 border-b border-line py-5 transition-colors duration-200 hover:bg-surface/40"
               >
-                <span className="flex min-w-0 items-center gap-3">
+                <span className="flex min-w-0 items-center gap-4">
                   <Icon
                     className="size-4 shrink-0 text-ink-faint transition-colors duration-200 group-hover:text-accent"
                     aria-hidden="true"
                     strokeWidth={1.75}
                   />
-                  <span className="min-w-0">
-                    <span className="mono-label block">{link.label}</span>
-                    <span className="mt-1 block truncate text-sm text-ink-muted transition-colors duration-200 group-hover:text-ink">
-                      {link.value}
-                    </span>
+                  <span className="font-display text-[clamp(1.5rem,2.4vw,2rem)] leading-none tracking-[-0.02em]">
+                    {link.label}
                   </span>
                 </span>
+                <span className="hidden min-w-0 truncate text-[13px] text-ink-muted sm:block">
+                  {link.value}
+                </span>
                 <ArrowUpRight
-                  className="size-4 shrink-0 text-ink-faint transition-all duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-accent"
                   aria-hidden="true"
+                  className="size-4 shrink-0 text-ink-faint transition-all duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-accent"
                   strokeWidth={1.75}
                 />
               </a>

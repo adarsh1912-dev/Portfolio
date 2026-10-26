@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { ArrowUpRight, X } from "lucide-react";
-import { profile, nav } from "../data/content.js";
+import { nav, profile } from "../data/content.js";
 
 export default function MobileMenu({ open, onClose }) {
   const panelRef = useRef(null);
@@ -67,18 +67,22 @@ export default function MobileMenu({ open, onClose }) {
           transition={{ duration: 0.2, ease: "easeOut" }}
         >
           <div className="shell flex h-[4.5rem] items-center justify-between border-b border-line">
-            <div className="flex items-center gap-3">
-              <span className="grid size-9 place-items-center border border-line font-mono text-[10px] tracking-[0.08em]">
-                {profile.initials}
+            <a
+              href="#top"
+              onClick={onClose}
+              className="flex min-h-11 items-center gap-2"
+            >
+              <span className="font-display text-xl leading-none tracking-[-0.02em]">
+                {profile.name}
               </span>
-              <span className="text-sm font-medium">{profile.name}</span>
-            </div>
+              <span aria-hidden="true" className="size-1.5 bg-accent" />
+            </a>
             <button
               ref={closeRef}
               type="button"
               onClick={onClose}
               aria-label="Close menu"
-              className="inline-flex size-11 items-center justify-center border border-line text-ink transition-colors duration-200 hover:border-accent hover:text-accent"
+              className="inline-flex size-11 items-center justify-center border border-line text-ink transition-colors duration-200 hover:border-ink"
             >
               <X className="size-5" aria-hidden="true" strokeWidth={1.5} />
             </button>
@@ -102,9 +106,9 @@ export default function MobileMenu({ open, onClose }) {
                     <a
                       href={item.href}
                       onClick={onClose}
-                      className="flex items-baseline justify-between gap-4 py-4"
+                      className="group flex items-baseline justify-between gap-4 py-4"
                     >
-                      <span className="font-display text-[2.5rem] leading-none tracking-[-0.01em]">
+                      <span className="font-display text-[2.75rem] leading-none tracking-[-0.02em] transition-transform duration-300 group-hover:translate-x-1">
                         {item.label}
                       </span>
                       <span className="mono-label">{item.index}</span>
@@ -116,7 +120,7 @@ export default function MobileMenu({ open, onClose }) {
               <a
                 href={`mailto:${profile.email}`}
                 onClick={onClose}
-                className="mt-8 inline-flex min-h-12 w-full items-center justify-center gap-3 border border-accent bg-accent px-5 font-mono text-[11px] uppercase tracking-[0.16em] text-accent-ink transition-colors hover:bg-ink hover:border-ink"
+                className="mt-8 inline-flex min-h-12 w-full items-center justify-center gap-3 bg-ink px-5 text-[13px] font-medium text-paper transition-colors duration-200 hover:bg-accent hover:text-ink"
               >
                 Let&apos;s talk
                 <ArrowUpRight
@@ -136,20 +140,21 @@ export default function MobileMenu({ open, onClose }) {
                     href={social.href}
                     target="_blank"
                     rel="noreferrer noopener"
-                    className="inline-flex min-h-11 items-center gap-1.5 font-mono text-[11px] uppercase tracking-[0.14em] text-ink-muted transition-colors hover:text-accent"
+                    className="inline-flex min-h-11 items-center gap-1.5 text-[13px] text-ink-muted transition-colors hover:text-ink"
                   >
                     {social.label}
                     <ArrowUpRight
-                      className="size-3"
+                      className="size-3.5"
                       aria-hidden="true"
                       strokeWidth={1.75}
                     />
                   </a>
                 ))}
               </div>
-              <p className="mt-4 border-t border-line pt-4 font-mono text-[10px] uppercase leading-relaxed tracking-[0.14em] text-ink-faint">
-                {profile.availability}
-              </p>
+              <div className="mt-4 flex flex-col gap-1.5 border-t border-line pt-4 text-[12px] text-ink-muted">
+                <p>{profile.availability}</p>
+                <p>{profile.location}</p>
+              </div>
             </div>
           </div>
         </motion.div>

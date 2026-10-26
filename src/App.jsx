@@ -9,10 +9,10 @@ import Skills from "./components/Skills.jsx";
 
 export default function App() {
   return (
-    <div className="page-frame grain relative min-h-screen">
+    <div className="grain relative min-h-screen">
       <a
         href="#main"
-        className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[70] focus:bg-accent focus:px-4 focus:py-3 focus:font-mono focus:text-[11px] focus:uppercase focus:tracking-[0.16em] focus:text-accent-ink"
+        className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[70] focus:bg-ink focus:px-4 focus:py-3 focus:font-sans focus:text-[12px] focus:font-medium focus:text-paper"
       >
         Skip to content
       </a>

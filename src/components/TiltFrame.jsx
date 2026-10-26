@@ -20,8 +20,8 @@ export default function TiltFrame({ children, className = "" }) {
       const x = (event.clientX - rect.left) / rect.width - 0.5;
       const y = (event.clientY - rect.top) / rect.height - 0.5;
 
-      element.style.setProperty("--tilt-x", `${(-y * 1.6).toFixed(2)}deg`);
-      element.style.setProperty("--tilt-y", `${(x * 2.2).toFixed(2)}deg`);
+      element.style.setProperty("--tilt-x", `${(-y * 1.2).toFixed(2)}deg`);
+      element.style.setProperty("--tilt-y", `${(x * 1.6).toFixed(2)}deg`);
     });
   };
 

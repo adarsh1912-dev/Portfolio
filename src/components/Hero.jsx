@@ -12,7 +12,7 @@ const container = {
 };
 
 const item = {
-  hidden: { opacity: 0, y: 18 },
+  hidden: { opacity: 0, y: 16 },
   show: { opacity: 1, y: 0, transition: { duration: 0.6, ease: EASE } },
 };
 
@@ -26,134 +26,112 @@ export default function Hero() {
     : { initial: "hidden", animate: "show", variants: container };
 
   return (
-    <section
-      id="top"
-      aria-label="Introduction"
-      className="relative scroll-mt-24"
-    >
-      <div className="shell pb-14 pt-12 md:pb-20 md:pt-16 lg:pt-20">
-        <motion.div
-          className="grid grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-10"
-          {...animate}
-        >
-          <div className="lg:col-span-7">
+    <section id="top" aria-label="Introduction" className="relative scroll-mt-24">
+      <div className="grid grid-cols-1 lg:min-h-[calc(100svh-4.5rem)] lg:grid-cols-12">
+        <div className="px-6 pb-12 pt-12 sm:px-10 lg:col-span-7 lg:flex lg:flex-col lg:justify-center lg:px-0 lg:pb-12 lg:pl-[max(3.5rem,calc((100vw-84rem)/2+3.5rem))] lg:pr-16 lg:pt-16">
+          <motion.div className="max-w-[44rem]" {...animate}>
             <motion.p
-              className="mono-label flex items-center gap-3 text-[10px] tracking-[0.16em] sm:text-[11px] sm:tracking-[0.18em]"
+              className="flex items-center gap-3 font-mono text-[10px] uppercase tracking-[0.14em] text-ink-faint"
               variants={reduceMotion ? undefined : item}
             >
               <span aria-hidden="true" className="size-1.5 bg-accent" />
               {profile.eyebrow}
-              <span
-                aria-hidden="true"
-                className="hidden h-px w-12 bg-line-strong sm:block"
-              />
             </motion.p>
 
             <motion.h1
-              className="mt-7 font-display text-[clamp(3.6rem,11vw,7.75rem)] leading-[0.86] tracking-[-0.035em] md:mt-9"
+              className="mt-8 font-display text-[clamp(3.8rem,8.7vw,8rem)] leading-[0.88] tracking-[-0.045em]"
               variants={reduceMotion ? undefined : item}
               aria-label="I build useful software."
             >
               {profile.headline.map((line) => (
-                <span
-                  key={line.text}
-                  className={`block ${line.italic ? "italic" : ""}`}
-                >
-                  {line.text}
-                  {line.accent ? (
-                    <span className="text-accent">{line.accent}</span>
-                  ) : null}
+                <span key={line.text} className="block">
+                  {line.highlight ? (
+                    <span className="highlight-lime">{line.text}</span>
+                  ) : (
+                    line.text
+                  )}
+                  {line.accent ? <span>{line.accent}</span> : null}
                 </span>
               ))}
             </motion.h1>
 
             <motion.p
-              className="mt-8 max-w-[33rem] text-[0.98rem] leading-relaxed text-ink-muted sm:text-[1.0625rem]"
+              className="mt-9 max-w-[34rem] text-[1.02rem] leading-[1.65] text-ink-muted"
               variants={reduceMotion ? undefined : item}
             >
               {profile.intro}
             </motion.p>
 
             <motion.div
-              className="mt-9 flex flex-col gap-3 sm:flex-row"
+              className="mt-9 flex flex-col items-start gap-4 sm:flex-row sm:flex-wrap sm:items-center sm:gap-x-8"
               variants={reduceMotion ? undefined : item}
             >
-              <Button href="#work" icon={ArrowDown}>
-                Explore my work
+              <Button
+                href="#work"
+                icon={ArrowDown}
+                className="w-full sm:w-auto"
+              >
+                Explore selected work
               </Button>
+
               {profile.resumeUrl ? (
-                <Button
+                <a
                   href={profile.resumeUrl}
-                  variant="secondary"
-                  icon={Download}
                   download
+                  className="group inline-flex min-h-11 items-center gap-2 text-[13px] font-medium text-ink"
                 >
-                  Download résumé
-                </Button>
+                  <span className="link-sweep">Download résumé</span>
+                  <Download
+                    aria-hidden="true"
+                    className="size-3.5 text-ink-muted transition-transform duration-200 group-hover:translate-y-0.5"
+                    strokeWidth={1.75}
+                  />
+                </a>
               ) : githubProfile ? (
-                <Button
+                <a
                   href={githubProfile.href}
-                  variant="secondary"
-                  icon={ArrowUpRight}
                   target="_blank"
                   rel="noreferrer noopener"
+                  className="group inline-flex min-h-11 items-center gap-2 text-[13px] font-medium text-ink"
                 >
-                  View GitHub
-                </Button>
+                  <span className="link-sweep">View GitHub</span>
+                  <ArrowUpRight
+                    aria-hidden="true"
+                    className="size-3.5 text-ink-muted transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
+                    strokeWidth={1.75}
+                  />
+                </a>
               ) : null}
             </motion.div>
 
             <motion.div
-              className="mt-10 flex items-center gap-3 border-t border-line pt-5"
+              className="mt-12 flex flex-col items-start gap-1.5 border-t border-line pt-4 text-[12px] text-ink-muted sm:flex-row sm:flex-wrap sm:items-center sm:gap-x-3"
               variants={reduceMotion ? undefined : item}
             >
-              <span className="relative flex size-2 shrink-0 items-center justify-center">
-                <span
-                  aria-hidden="true"
-                  className="absolute inline-flex size-2 animate-ping bg-accent opacity-40 motion-reduce:hidden"
-                />
-                <span
-                  aria-hidden="true"
-                  className="relative inline-flex size-1.5 bg-accent"
-                />
+              <a href="#contact" className="link-sweep flex items-center gap-2">
+                <span aria-hidden="true" className="size-1.5 bg-accent" />
+                Open to internships
+              </a>
+              <span aria-hidden="true" className="hidden text-line-strong sm:inline">
+                /
               </span>
-              <p className="font-mono text-[10px] uppercase leading-relaxed tracking-[0.16em] text-ink-faint">
-                {profile.availability}
-              </p>
+              <span>{profile.location}</span>
+              <span aria-hidden="true" className="hidden text-line-strong sm:inline">
+                /
+              </span>
+              <span>B.Tech IT · 2027</span>
             </motion.div>
-          </div>
+          </motion.div>
+        </div>
 
-          <div className="lg:col-span-5 lg:pl-2">
-            <motion.div variants={reduceMotion ? undefined : item}>
-              <HeroVisual />
-            </motion.div>
-          </div>
-        </motion.div>
-
-        <motion.dl
-          className="mt-12 grid grid-cols-1 border-t border-line md:mt-16 md:grid-cols-3"
-          initial={reduceMotion ? false : { opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.5, delay: reduceMotion ? 0 : 0.35 }}
-        >
-          {profile.meta.map((meta, index) => (
-            <div
-              key={meta.label}
-              className={`flex items-baseline gap-3 py-4 md:py-5 ${
-                index > 0
-                  ? "border-t border-line md:border-l md:border-t-0 md:pl-6"
-                  : "md:pr-6"
-              }`}
-            >
-              <dt className="mono-label shrink-0">{meta.label}</dt>
-              <span
-                aria-hidden="true"
-                className="hidden h-px flex-1 border-b border-dotted border-line-strong sm:block"
-              />
-              <dd className="text-right text-[13px] text-ink">{meta.value}</dd>
-            </div>
-          ))}
-        </motion.dl>
+        <div className="relative mt-10 h-[58svh] min-h-[24rem] lg:col-span-5 lg:mt-0 lg:h-auto lg:min-h-0">
+          <motion.div
+            className="h-full w-full"
+            variants={reduceMotion ? undefined : item}
+          >
+            <HeroVisual />
+          </motion.div>
+        </div>
       </div>
     </section>
   );
