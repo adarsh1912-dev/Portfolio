@@ -43,7 +43,7 @@ Everything editable lives in `src/data/content.js`.
 | GitHub / LinkedIn | `profile.socials` |
 | Location | `profile.location` |
 | Availability line | `profile.availability` and `profile.availabilityShort` |
-| Résumé | `profile.resumeUrl` and replace `public/Resume.pdf` |
+| Résumé | `profile.resumeUrl` and replace `public/SoftwareEngineerResume.pdf` |
 | Projects | `projects` (titles, copy, stack, `repoUrl`, `liveUrl`, `liveLabel`, `demoHost`) |
 | Education | `education` |
 | Experience | `experience` — currently empty, with a commented example |
@@ -51,7 +51,7 @@ Everything editable lives in `src/data/content.js`.
 
 ### Résumé state
 
-`profile.resumeUrl` is set to `/Resume.pdf`, served from `public/Resume.pdf`. Replace that file with an updated PDF while keeping the file name, or update the URL if you rename it.
+`profile.resumeUrl` is set to `/SoftwareEngineerResume.pdf`, served from `public/SoftwareEngineerResume.pdf`. Replace that file with an updated PDF while keeping the file name, or update the URL if you rename it.
 
 If `profile.resumeUrl` is ever empty, the hero falls back to “View GitHub” and the contact section omits the Résumé card.
 

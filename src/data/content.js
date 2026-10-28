@@ -17,7 +17,7 @@ export const profile = {
   availabilityShort: "Open to internships · Graduating 2027",
   location: "Kolkata, West Bengal, India",
   email: "aj19122001@gmail.com",
-  resumeUrl: "/Resume.pdf",
+  resumeUrl: "/SoftwareEngineerResume.pdf",
   socials: [
     {
       label: "GitHub",
